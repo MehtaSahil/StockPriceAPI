@@ -4,6 +4,9 @@ const config = require('./config.js');
 const parser = require('./responseParser.js')
 const app = express();
 
+const apiBaseUrl = 'https://www.alphavantage.co/query?';
+
+// Enable form parameter parsing
 app.use(express.urlencoded({extended: true}));
 
 app.get('/api/quote', (req, res) => {
@@ -13,7 +16,7 @@ app.get('/api/quote', (req, res) => {
     symbolParam = 'symbol=' + req.query.symbol;
     apiKeyParam = 'apikey=' + config.apiKey;
     params = [functionParam, symbolParam, apiKeyParam].join('&');
-    queryString = config.apiBaseUrl + params;
+    queryString = apiBaseUrl + params;
 
     request.get(queryString, (queryErr, queryRes, queryBody) => {
 
