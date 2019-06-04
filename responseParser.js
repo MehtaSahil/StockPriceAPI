@@ -8,7 +8,7 @@ parseGlobalQuote = function(bodyObj) {
     bodyObj = bodyObj['Global Quote'];
 
     // Clean version of the response body. This object is sent to the client
-    newBody = {};
+    let newBody = {};
     newBody.symbol = bodyObj['01. symbol'];
     newBody.open = bodyObj['02. open'];
     newBody.high = bodyObj['03. high'];

@@ -12,16 +12,16 @@ app.use(express.urlencoded({extended: true}));
 app.get('/api/quote', (req, res) => {
 
     // Build query string
-    functionParam = 'function=GLOBAL_QUOTE';
-    symbolParam = 'symbol=' + req.query.symbol;
-    apiKeyParam = 'apikey=' + config.apiKey;
-    params = [functionParam, symbolParam, apiKeyParam].join('&');
-    queryString = apiBaseUrl + params;
+    let functionParam = 'function=GLOBAL_QUOTE';
+    let symbolParam = 'symbol=' + req.query.symbol;
+    let apiKeyParam = 'apikey=' + config.apiKey;
+    let params = [functionParam, symbolParam, apiKeyParam].join('&');
+    let queryString = apiBaseUrl + params;
 
     request.get(queryString, (queryErr, queryRes, queryBody) => {
 
         // Parse response body to test for errors
-        bodyObj = JSON.parse(queryBody);
+        let bodyObj = JSON.parse(queryBody);
         if (bodyObj['Error Message']) {
             res.status(400);
             res.json(bodyObj);
@@ -29,7 +29,6 @@ app.get('/api/quote', (req, res) => {
             res.json(parser.parseGlobalQuote(bodyObj));
         }
     })
-
 });
 
 const PORT = process.env.PORT || 5000;
