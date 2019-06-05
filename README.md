@@ -8,8 +8,8 @@ As of 6/4/2019 the StockPriceAPI is still in early phases of development and as 
 1. Install Node.js and npm (Node Package Manager) by visiting [nodejs.org](https://nodejs.org)
 1. Open a terminal, clone the master branch of this repository, and change into the `StockPriceAPI` directory.
 1. Run the `npm install` command to install all dependencies required by the service. This may take some time.
-1. Create a `config.js` file in the `StockPriceAPI` directory. This file contains a `config` object in which your personal API key and the name of your logfile lives.
-1. This file is not pushed to GitHub to ensure that the API key and logfile remain private. The following block of code can be copied into your `config.js` file where you can insert your specific API key and logfile name. If you do not have an API key, visit [Alpha Vantage](https://www.alphavantage.co/support/#api-key) website to claim one for **free**.
+1. Create a `config.js` file in the `StockPriceAPI` directory. This file contains a `config` object in which your personal API key and the name of your logfile live. This file is not pushed to GitHub to ensure that the API key and logfile remain private.
+1. Copy the following block of code into your `config.js` file. Then onsert your specific API key and logfile name. If you do not have an API key, visit [Alpha Vantage](https://www.alphavantage.co/support/#api-key) website to claim one for **free**.
 
     ```
     const config = {
