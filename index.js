@@ -1,7 +1,9 @@
 const express = require('express');
 const request = require('request');
-const config = require('./config.js');
-const parser = require('./responseParser.js')
+const config = require('./config');
+const parser = require('./responseParser')
+const logger = require('./logger');
+const url = require('url');
 const app = express();
 
 const apiBaseUrl = 'https://www.alphavantage.co/query?';
@@ -10,6 +12,8 @@ const apiBaseUrl = 'https://www.alphavantage.co/query?';
 app.use(express.urlencoded({extended: true}));
 
 app.get('/api/quote', (req, res) => {
+
+    logger.log(req.protocol + '://' + req.get('host') + req.originalUrl);
 
     // Build query string
     let functionParam = 'function=GLOBAL_QUOTE';

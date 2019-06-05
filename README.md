@@ -6,18 +6,20 @@ A simple API (Node + Express) to retrieve stock price information. This API is a
 ### Running the Service
 As of 6/4/2019 the StockPriceAPI is still in early phases of development and as such is not deployed. Follow these steps to run the service locally:
 1. Install Node.js and npm (Node Package Manager) by visiting [nodejs.org](https://nodejs.org)
-2. Open a terminal, clone the master branch of this repository, and change into the `StockPriceAPI` directory.
-3. Run the `npm install` command to install all dependencies required by the service. This may take some time.
-4. Create a `config.js` file in the `StockPriceAPI` directory. This file contains a `config` object in which your personal API key lives. This file is not pushed to GitHub to ensure that the API key remains private (as it should). `config.js` is required by `index.js` to properly execute API calls. The following block of code can be copied into your `config.js` file where you can insert your specific API key. If you do not have an API key, visit [Alpha Vantage](https://www.alphavantage.co/support/#api-key) website to claim one for **free**.
+1. Open a terminal, clone the master branch of this repository, and change into the `StockPriceAPI` directory.
+1. Run the `npm install` command to install all dependencies required by the service. This may take some time.
+1. Create a `config.js` file in the `StockPriceAPI` directory. This file contains a `config` object in which your personal API key and the name of your logfile lives.
+1. This file is not pushed to GitHub to ensure that the API key and logfile remain private. The following block of code can be copied into your `config.js` file where you can insert your specific API key and logfile name. If you do not have an API key, visit [Alpha Vantage](https://www.alphavantage.co/support/#api-key) website to claim one for **free**.
 
     ```
     const config = {
-        apiKey: '[YOUR API KEY]'
+        apiKey: '[YOUR API KEY]',
+        logFile: 'logs.txt'
     }
 
     module.exports = config;
     ```
-5. Run the `npm run dev` command. Starting the service this way restarts the service each time a file is changed. Running `npm run start` will simply start the service, but any changes will require a server restart.
+1. Run the `npm run dev` command. Starting the service this way restarts the service each time a file is changed. Running `npm run start` will simply start the service, but any changes will require a server restart.
 
 ### Retrieving Data
 As of 6/4/2019 the StockPriceAPI supports the retrieval of current stock quotes for single stock symbols (e.g. MSFT, FB, F, GOOG, etc). Authentication is not yet implemented. The API is accessible through a dedicated client and through any client application that supports API calls.
