@@ -16,29 +16,10 @@ app.get('/api/quote', (req, res) => {
 
     logger.log(req.protocol + '://' + req.get('host') + req.originalUrl);
 
-    let result = alphaVantageService.singleQuote(req.query.symbol);
-    console.log(result)
-
-    // // Build query string
-    // let functionParam = 'function=GLOBAL_QUOTE';
-    // let symbolParam = 'symbol=' + req.query.symbol;
-    // let apiKeyParam = 'apikey=' + config.apiKey;
-    // let params = [functionParam, symbolParam, apiKeyParam].join('&');
-    // let queryString = apiBaseUrl + params;
-    //
-    // request.get(queryString, (queryErr, queryRes, queryBody) => {
-    //
-    //     // Parse response body to test for errors
-    //     let bodyObj = JSON.parse(queryBody);
-    //     if (bodyObj['Error Message']) {
-    //         res.status(400);
-    //         res.json(bodyObj);
-    //     } else {
-    //         res.json(parser.parseGlobalQuote(bodyObj));
-    //     }
-    // })
-
-    res.json(result);
+    alphaVantageService.singleQuote(req.query.symbol).then((responseInfo) => {
+        res.status(responseInfo.status)
+        res.json(responseInfo.body)
+    }).catch((err) => {console.log(err)});
 });
 
 app.get('/api/multiquote', (req, res) => {

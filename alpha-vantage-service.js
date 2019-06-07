@@ -16,7 +16,7 @@ const config = require('./config');
 const parser = require('./responseParser');
 const apiBaseUrl = 'https://www.alphavantage.co/query?';
 
-singleQuote = function(symbol) {
+function singleQuote(symbol) {
     // Build query string
     let functionParam = 'function=GLOBAL_QUOTE';
     let symbolParam = 'symbol=' + symbol;
@@ -24,17 +24,17 @@ singleQuote = function(symbol) {
     let params = [functionParam, symbolParam, apiKeyParam].join('&');
     let queryString = apiBaseUrl + params;
 
-    request.get(queryString, (queryErr, queryRes, queryBody) => {
-
-        // Parse response body to test for errors
-        let bodyObj = JSON.parse(queryBody);
-        console.log(bodyObj)
-        if (bodyObj['Error Message']) {
-            // TODO: Communicate 400 BAD REQUEST
-            return bodyObj
-        } else {
-            return parser.parseGlobalQuote(bodyObj);
-        }
+    // Promise to return the response
+    return new Promise((resolve, reject) => {
+        request.get(queryString, (queryErr, queryRes, queryBody) => {
+            // Parse response body to test for errors
+            let bodyObj = JSON.parse(queryBody);
+            if (bodyObj['Error Message']) {
+                resolve({status: 400, body: bodyObj})
+            } else {
+                resolve({status: 200, body: parser.parseGlobalQuote(bodyObj)})
+            }
+        })
     })
 }
 
