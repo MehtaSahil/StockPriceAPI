@@ -25,30 +25,30 @@ app.get('/api/quote', (req, res) => {
 app.get('/api/multiquote', (req, res) => {
     logger.log(req.protocol + '://' + req.get('host') + req.originalUrl);
 
-    let quotesObj = {};
+    let responses = {};
+    let promises = [];
 
+    // Start requests
     let symbols = req.query.symbol.split(',');
     symbols.forEach((symbol) => {
-        console.log('symbol: ' + symbol);
-        // Retrieve data from API for each individual symbol
-        // Build query string
-        let functionParam = 'function=GLOBAL_QUOTE';
-        let symbolParam = 'symbol=' + symbol;
-        let apiKeyParam = 'apikey=' + config.apiKey;
-        let params = [functionParam, symbolParam, apiKeyParam].join('&');
-        let queryString = apiBaseUrl + params;
+        promises.push(alphaVantageService.singleQuote(symbol))
+    })
 
-        request.get(queryString, (queryErr, queryRes, queryBody) => {
-            console.log('request callback for: ' + symbol);
-            let bodyObj = JSON.parse(queryBody);
-            quotesObj[symbol] = parser.parseGlobalQuote(bodyObj);
+    // Resolve requests and return to client
+    Promise.all(promises).then((responseInfos) => {
 
-            if (Object.keys(quotesObj).length === symbols.length) {
-                res.status(200);
-                res.json(quotesObj);
-            }
+        /*
+        Could do this aggregation in the .then() for each individual promise,
+        but we might run into concurrency issues (I'm not sure). It is safter to
+        wait for all responses to come in before aggregation.
+        */
+        responseInfos.forEach((responseInfo) => {
+            responses[responseInfo.body.symbol] = responseInfo.body
         })
-    });
+
+        res.status(200);
+        res.json(responses);
+    })
 });
 
 const PORT = process.env.PORT || 5000;
