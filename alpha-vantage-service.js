@@ -11,7 +11,7 @@ const request = require('request');
 const config = require('./config');
 const apiBaseUrl = 'https://www.alphavantage.co/query?';
 
-function singleQuote(symbol) {
+function singleQuotePromise(symbol) {
     // Build query string
     let queryString = buildQueryString('GLOBAL_QUOTE', symbol);
 
@@ -27,6 +27,34 @@ function singleQuote(symbol) {
             }
         })
     })
+}
+
+function singleQuote(symbol, callback) {
+    singleQuotePromise(symbol).then((responseInfo) => {
+        callback(responseInfo)
+    })
+}
+
+function multiQuote(symbols, callback) {
+    let promises = [];
+    symbols.forEach((symbol) => {
+        promises.push(singleQuotePromise(symbol))
+    })
+
+    // Resolve requests and return to client
+    let responses = {};
+    Promise.all(promises).then((responseInfos) => {
+        /*
+        We could do this aggregation in the .then() for each individual promise,
+        but we might run into concurrency issues (I'm not sure). It is safer to
+        wait for all responses to come in before aggregation.
+        */
+        responseInfos.forEach((responseInfo) => {
+            responses[responseInfo.body.symbol] = responseInfo.body
+        })
+
+        callback(responses);
+    }).catch((err) => {console.log(err)})
 }
 
 function buildQueryString(functionType, symbol) {
@@ -58,4 +86,4 @@ function parseGlobalQuote(bodyObj) {
     return newBody;
 }
 
-module.exports = {singleQuote: singleQuote}
+module.exports = {singleQuote: singleQuote, multiQuote: multiQuote}
